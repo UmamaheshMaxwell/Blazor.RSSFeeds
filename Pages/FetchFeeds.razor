@@ -1,0 +1,44 @@
+﻿@page "/fetchfeeds"
+
+@using Blazor.RSSFeeds.Data
+@inject RssFeedService FeedService
+
+<h1>C# Corner RSS Feeds</h1>
+<p>Getting latest post details from # Corner RSS Feeds</p>
+@if (feeds == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Post Type</th>
+                <th>Published Date</th>
+                <th>Author</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var feed in feeds)
+            {
+                <tr>
+                    <td><NavLink href=@feed.Link target="_blank">@feed.Title</NavLink></td>
+                    <td>@feed.FeedType</td>
+                    <td>@feed.PublishDate</td>
+                    <td>@feed.Author</td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    List<Feed> feeds;
+    protected override async Task OnInitializedAsync()
+    {
+        feeds = await FeedService.GetFeedsAsyc();
+    }
+}
